@@ -1,9 +1,0 @@
-/**
- * 
- */
-/**
- * 
- */
-module JframeCalcNew {
-	requires exp4j;
-}
