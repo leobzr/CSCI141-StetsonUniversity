@@ -1,0 +1,121 @@
+package JCalculator.java;
+//Essential import list:]
+//java swing libraries, they create the gui and make the action listeners
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+//this exp4j library is a tiny library that makes expression evaluation
+import net.objecthunter.exp4j.Expression;
+import net.objecthunter.exp4j.ExpressionBuilder;
+
+
+//GUI Calculator - Program by: Leonardo Bezerra Correia da Silva
+public class JCalculator {
+	
+	public static void main(String[] args) {
+		//Initializing and designing the GUI:
+		JFrame calculator = new JFrame("Calculator");
+		//This operation defines the type of closing of the gui, I could change if I wanted to
+		calculator.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		calculator.setSize(300, 1080); //300px by 400px :)
+		calculator.setLayout(new BorderLayout());//sets the type of layout the window will have, this could also be changed
+		
+		
+		//setting text field (where the expression will be):
+		JTextField expressionField = new JTextField();
+		calculator.add(expressionField, BorderLayout.NORTH); //place the expression field on the GUI and in north related to the center of the screen
+		
+		//setting the number panel:
+		JPanel numberPanel = new JPanel(new GridLayout(4, 2));//this creates the number panel and sets the grid layout to be displayed as 4 by 4 buttons
+		calculator.add(numberPanel, BorderLayout.CENTER);
+		
+		//Now that I have created and added the button panel to the gui, its time to create the button labels:
+		//Remeber that, to it be displayed like a calculator, you have to organize the numbers and icons in the right order
+		String[] buttonLabels = {
+				"7", "8", "9", "/",
+	            "4", "5", "6", "*",
+	            "1", "2", "3", "-",
+	            "0", ".", "=", "+", "C"
+		};
+		
+		//Adding a listener that reacts to button clicks(this class is not from the swing library it will be worked on later):
+		ButtonListener listener = new ButtonListener(expressionField);
+		
+		//Labeling each button:
+		for (String label: buttonLabels) {
+			JButton button = new JButton(label);
+			numberPanel.add(button);
+			button.setFont(new Font("Sans-Serif", Font.BOLD, 24));
+			button.addActionListener(listener);
+		}
+		
+	
+		
+		//set the frame to be visible (didnt even know this was necessary)
+		calculator.setVisible(true);		
+	}
+	
+	//OUTER CLASSES SECTION:
+	
+	//creating the listener for the button pressing
+	//This could be another file, but I will keep it here
+	static class ButtonListener implements ActionListener {
+		private JTextField expressionField;
+		private boolean displayResult; //This set the variable to display the result and erase it
+		
+		public ButtonListener(JTextField expressionField) {
+			this.expressionField = expressionField;
+			this.displayResult = false; 
+		}
+		
+		//essential part:
+		//I am going to override the ActionListener command, so it knows how to read to build the expression
+		//and when to begin evaluating it
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			JButton button = (JButton) e.getSource(); 
+			String buttonLabel = button.getText(); 
+			
+			//when finishing the expression:
+			if (buttonLabel.equals("=")) {
+				String expression = expressionField.getText();//after hitting =, this takes all strings on the expression field
+				try {
+					double result = evaluateExpression(expression);//it evaluates the expression
+					expressionField.setText(Double.toString(result));//and takes it back to string, to be displayed
+					displayResult = true;
+				} catch (Exception ex) {
+					ex.printStackTrace();
+					expressionField.setText("Error"); //if any exception error occur, throw this message
+				}
+			} else if (buttonLabel.equals("C")) { //Clearing button
+				expressionField.setText(" ");
+				displayResult = false;
+			} else {
+				if (displayResult) { //if the result is displayed
+					expressionField.setText(buttonLabel); //takes the next button pressed
+					displayResult = false; //setting the displayed result to false
+				} else {
+					expressionField.setText(expressionField.getText()+ buttonLabel);
+			}	
+			}
+		
+	}
+		
+		//now, the expression evaluator, using the exp4j library:
+		private double evaluateExpression(String expression) {
+			try {
+				Expression e = new ExpressionBuilder(expression).build();
+				return e.evaluate();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				expressionField.setText("Invalid Expression");
+				return 0;
+			}
+		}
+}
+}
+		
+
+

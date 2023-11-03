@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry excluding="jframeCalculator/src/jframeCalculator/|arrayspractice/src/|tempconverter/src/|challengeGuessingWord/src/|WriterPractice/src/|jframeTest/src/|primitivedata/|scannertesting/src/|inclasspractice/|EncapsAbstraction/src/|dbaclassactivity/src/|guessthenumber/src/|Eggman.java/src/|collectionsPractice/src/|MethodPractice/src/|guessingGPT/src/|JframeCalcNew/src/|loopsclass/src/|classandobject/src/|jframeCalculator/src/|csGradeCalc/src/|footballGame/src/|helloworld.java/src/|writerjav4/src/|inheritance/src/|todolist/src/" kind="src" path=""/>
+	<classpathentry kind="src" path="arrayspractice/src"/>
+	<classpathentry kind="src" path="challengeGuessingWord/src"/>
+	<classpathentry kind="src" path="classandobject/src"/>
+	<classpathentry kind="src" path="collectionsPractice/src"/>
+	<classpathentry kind="src" path="csGradeCalc/src"/>
+	<classpathentry kind="src" path="dbaclassactivity/src"/>
+	<classpathentry kind="src" path="Eggman.java/src"/>
+	<classpathentry kind="src" path="EncapsAbstraction/src"/>
+	<classpathentry kind="src" path="footballGame/src"/>
+	<classpathentry kind="src" path="guessingGPT/src"/>
+	<classpathentry kind="src" path="guessthenumber/src"/>
+	<classpathentry kind="src" path="helloworld.java/src"/>
+	<classpathentry kind="src" path="inclasspractice"/>
+	<classpathentry kind="src" path="inheritance/src"/>
+	<classpathentry kind="src" path="JframeCalcNew/src"/>
+	<classpathentry excluding="jframeCalculator/" kind="src" path="jframeCalculator/src"/>
+	<classpathentry kind="src" path="jframeCalculator/src/jframeCalculator"/>
+	<classpathentry kind="src" path="jframeTest/src"/>
+	<classpathentry kind="src" path="loopsclass/src"/>
+	<classpathentry kind="src" path="MethodPractice/src"/>
+	<classpathentry kind="src" path="primitivedata"/>
+	<classpathentry kind="src" path="scannertesting/src"/>
+	<classpathentry kind="src" path="tempconverter/src"/>
+	<classpathentry kind="src" path="todolist/src"/>
+	<classpathentry kind="src" path="writerjav4/src"/>
+	<classpathentry kind="src" path="WriterPractice/src"/>
+	<classpathentry kind="output" path="Eggman.java/bin"/>
+</classpath>
