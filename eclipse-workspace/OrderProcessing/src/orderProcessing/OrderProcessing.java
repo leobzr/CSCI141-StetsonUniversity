@@ -2,9 +2,16 @@ package orderProcessing;
 
 import java.util.concurrent.TimeUnit;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Queue;
 import java.util.Scanner;
 import java.util.TreeMap;
+
+//December 1st - DONE - Turned in. 
+//There is a lot of unecessary comments on this code
+//But this is the way I organize my thoughts. Feel free to remove them if you want
 
 public class OrderProcessing {
 	static Scanner input = new Scanner(System.in);
@@ -201,15 +208,26 @@ public class OrderProcessing {
 						for (int i = 0; i < lim; i++) {
 														
 							System.out.println("\nType the item name: ");
-							String name = input.nextLine();
-							System.out.println("\nHow many of it you want to remove? \n-> ");
-							int quantity = input.nextInt();
-							input.nextLine();
-							inventory.remove(name, quantity); //it is not just like that - Think about this later
-							
-							//unlike the first function, there is no option. Or there is at least one item, or it would not even be added.
-							
-							System.out.printf("\nThe item %s was removed. There are %d units of it left.", i+1, name, quantity);
+				            String name = input.nextLine();
+				            System.out.println("\nHow many of it you want to remove? \n-> ");
+				            int remove = input.nextInt();
+				            input.nextLine();
+				            
+				            // Check if the item exists in the inventory
+				            if (inventory.containsKey(name)) {
+				                int currentQuantity = inventory.get(name);
+				                
+				                // Check if there are enough items to remove
+				                if (remove <= currentQuantity) {
+				                    inventory.put(name, currentQuantity - remove);
+
+				                    System.out.printf("\nThe item %s was removed. There are %d units of it left.", name, currentQuantity - remove);
+				                } else {
+				                    System.out.printf("\nNot enough quantity of %s to remove. Current quantity: %d", name, currentQuantity);
+				                }
+				            } else {
+				                System.out.printf("\nThe item %s is not in the inventory.", name);
+				            }
 						}
 					System.out.println("\nAre you done? \n[0] Yes \n[1] No \n-> ");
 					done = input.nextInt();
@@ -233,12 +251,94 @@ public class OrderProcessing {
 	//---------------------------------------------------------------------------------------------------------------------------------------------------
 	
 	public static void orderDetails() throws InterruptedException{
+		Queue<String> orderq = new LinkedList<>();
+		Queue<String> orderq2 = new LinkedList<>(); 
+		Map<String, Integer> numOrder = new TreeMap<>();
+		//Both will be equal, the poin is that the second list will be the removable one
+		//that will be shown on the print down below. The order will truly store the values that the user can remove later
 		//This is a method to just show what orders are pending and their details
 		//I will also add an option to remove an order here, I forgot about that :p
 		//This method will check the orders placed on the placeorder method and return any details of it
 		TimeUnit.SECONDS.sleep(3);
 		System.out.println("---Displaying Orders and Details---");
 		//do the same that I did on the remove method
+		//I can create a queue for each order, so them can be accessed in order
+		int count = 0;
+		System.out.println("The current Order Queue is: ");
+		for (Map.Entry<String, String> orderlist : orders.entrySet()) {
+			String key  = orderlist.getKey();
+			String value = orderlist.getValue();
+			
+			if (value.equals("")) {
+				orderq.add(key + " | Details: This order has no details.");
+				orderq2.add(key + " | Details: This order has no details.");
+			} else {
+				orderq.add(key + " | Details: " + value);
+				orderq2.add(key + " | Details: " + value);
+			}	
+			String inOrder = orderq2.remove();
+			count++;
+			numOrder.put(key, count);
+			System.out.println(count +"- " + inOrder);
+		}
+
+	    System.out.println("Would you like to remove an order? \n[0]Yes.\n[1]No. ");
+	    int choice = input.nextInt();
+	    if (choice == 0) {
+	        int done = 1;
+	        do {
+	            System.out.println("How many different orders would you like to remove? (999 to clear) \n-> ");
+	            int lim = input.nextInt();
+	            input.nextLine();
+	            if (lim == 999) {
+	                numOrder.clear();
+	                System.out.println("The order list was cleared.");
+	            } else {
+	                System.out.println("Your Ordered List is: ");
+	                for (Map.Entry<String, Integer> entry : numOrder.entrySet()) {
+	                    System.out.printf("[%d] %s%n", entry.getValue(), entry.getKey());
+	                }
+
+	                for (int i = 0; i < lim; i++) {
+	                    System.out.println("\nType the order number: ");
+	                    int remove = input.nextInt();
+	                    input.nextLine();
+
+	                    if (numOrder.containsValue(remove)) {
+	                        String removedOrder = getOrderKeyByValue(numOrder, remove);
+	                        System.out.println("Order " + remove + " (" + removedOrder + ") was removed.");
+	                        numOrder.remove(removedOrder);
+	                    } else {
+	                        System.out.printf("\nThe order number %d is not in the order list.", remove);
+	                    }
+	                }
+	            }
+
+	            System.out.println("\nAre you done? \n[0] Yes \n[1] No \n-> ");
+	            done = input.nextInt();
+	        } while (done != 0);
+
+	        System.out.println("This is your Order List now: ");
+	        for (Map.Entry<String, Integer> iterateOL : numOrder.entrySet()) {
+	            String key = iterateOL.getKey();
+	            int value = iterateOL.getValue();
+	            System.out.printf("\n%d. %s", value-1, key);
+	            System.out.println("\n-");
+	        }
+	        System.out.println("\n--Going back to the operator selector--");
+	        TimeUnit.SECONDS.sleep(3);
+	    }
 	}
 
+	// Helper method to get the key associated with a given value in a map
+		private static <K, V> K getOrderKeyByValue(Map<K, V> map, V value) {
+		    for (Map.Entry<K, V> entry : map.entrySet()) {
+		        if (Objects.equals(value, entry.getValue())) {
+		            return entry.getKey();
+		        }
+		    }
+		    return null;
+		}
 }
+
+
